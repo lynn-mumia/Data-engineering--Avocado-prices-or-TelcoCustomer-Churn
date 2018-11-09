@@ -6,8 +6,11 @@
 import csv
 import numpy as np
 import pandas as pd
-#import seaborn as sns
+import seaborn as sns
 import matplotlib.pyplot as plt
+from pandas import TimeGrouper
+from pandas import DataFrame
+from pandas import Series
 
 
 #Reading the data into a dataframe
@@ -53,7 +56,32 @@ avocado.info()
 #Plots to explore the volumes of avocadoes with respect to date
 x=avocado['Date']
 y=avocado['Total Volume']
+plt.plot(style='k.')
 plt.plot(x,y)
 plt.show()
 
+#plotting with dots instead of lines
+#plt.plot(style='k.')
+#plt.show()
 
+
+#Working on the time series prediction model of dates versus the volume
+from fbprophet import Prophet
+
+#Fitting the model
+p=Prophet()
+p.fit(avocado-date,time)
+
+#Making the future dataframe which will store the predicted values
+avocadoFuture=p.make_future_dataframe(periods=365)
+avocadoFuture(tail)
+
+#Forecasting values
+avocadoForecast= p.predict(avocadoFuture)
+avocadoForecast[["ds","yhat","yhat_lower","yhat_upper"]].tail()
+
+#plotting the forecast
+avocadoForecastPlot=p.plot(avocadoForecast)
+
+#plotting the forecast components
+avocadoForecastComponentPlot= p.plot_components(avocadoForecast)
